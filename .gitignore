@@ -1,0 +1,8 @@
+.env
+lib/
+target/
+*.log
+berichte/
+# Dateien, die Beispiele erzeugen
+verlauf.svg
+*.csv

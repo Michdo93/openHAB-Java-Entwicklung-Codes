@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Begleit-Repository zu »openHAB & Java-Entwicklung« (Reihe openHAB REST API).
+     Einmal ausführen:  mvn dependency:copy-dependencies
+     Danach startet jedes Beispiel direkt aus dem Quelltext:
+       ./starte.sh kapitel10_erste_schritte/B01_Verbinden.java
+     mvn test führt die Tests aus Kapitel 19 aus. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>de.restbuch</groupId>
+    <artifactId>openhab-java-entwicklung-codes</artifactId>
+    <version>1.0.0</version>
+    <name>openHAB &amp; Java-Entwicklung – Begleit-Repository</name>
+
+    <properties>
+        <maven.compiler.release>25</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <javafx.version>21.0.5</javafx.version>
+    </properties>
+
+    <!-- java-openhab-rest-client und java-openhab-test-suite kommen von JitPack -->
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.Michdo93</groupId>
+            <artifactId>java-openhab-rest-client</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.Michdo93</groupId>
+            <artifactId>java-openhab-test-suite</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <!-- nur für die JavaFX-Oberfläche in Kapitel 17 -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <!-- Kapitel 19: Die Klassen aus Kapitel 17 und 18 sind die "Produktion",
+             kapitel19_tests/ enthält ihre Tests. Die Einzeldatei-Beispiele (B01_…)
+             gehören nicht dazu; sie startet ./starte.sh direkt aus dem Quelltext. -->
+        <sourceDirectory>${project.basedir}</sourceDirectory>
+        <testSourceDirectory>kapitel19_tests</testSourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
+                <configuration>
+                    <includes>
+                        <include>kapitel17_philosophie1/ohapp/*.java</include>
+                        <include>kapitel18_philosophie2/werkstatt/*.java</include>
+                        <!-- Kapitel 20: die Projekte, die als JAR laufen -->
+                        <include>kapitel20_projekte/ohcli/*.java</include>
+                        <include>kapitel20_projekte/backend/*.java</include>
+                        <include>kapitel20_projekte/mcp/OpenHABMcp.java</include>
+                    </includes>
+                    <!-- ein eigenständiges Programm, kein Test -->
+                    <testExcludes>
+                        <testExclude>Vorabtest.java</testExclude>
+                    </testExcludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.3</version>
+                <configuration>
+                    <!-- Unit-Tests (…Test) und Integrationstests (…IT) in einem Lauf -->
+                    <includes>
+                        <include>**/*Test.java</include>
+                        <include>**/*IT.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+            </plugin>
+            <!-- Kapitel 20: mvn package baut target/ohwerkzeuge.jar – ein JAR mit allen
+                 Klassen und Bibliotheken; java -jar startet ohcli -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.4.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>ohwerkzeuge</finalName>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>org.openjfx:*</exclude>
+                                </excludes>
+                            </artifactSet>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>ohcli.Ohcli</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- mvn dependency:copy-dependencies legt alle JARs nach lib/ -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.5.0</version>
+                <configuration>
+                    <outputDirectory>${project.basedir}/lib</outputDirectory>
+                    <includeScope>runtime</includeScope>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,27 @@
+# systemd-Unit für den Rechner als Gerät
+#   sudo cp rechner-geraet.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now rechner-geraet
+[Unit]
+Description=Rechner als Gerät für openHAB (REST API, Java)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=openhab-geraet
+WorkingDirectory=/opt/openhab-java-entwicklung
+Environment=OPENHAB_URL=http://127.0.0.1:8080
+# Datei mit einer Zeile OPENHAB_TOKEN=oh.…, nur für root lesbar
+EnvironmentFile=/etc/openhab-geraet.env
+ExecStart=/usr/bin/java --enable-native-access=ALL-UNNAMED -cp "lib/*" \
+    kapitel18_philosophie2/RechnerGeraet.java --intervall=30
+Restart=on-failure
+RestartSec=10
+# Dem Dienst nur erlauben, was er braucht
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

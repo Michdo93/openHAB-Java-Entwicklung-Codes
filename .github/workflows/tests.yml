@@ -1,0 +1,15 @@
+# Tests bei jedem Push. Die Integrationstests brauchen ein echtes openHAB und
+# werden ohne OPENHAB_TOKEN automatisch übersprungen (@EnabledIfEnvironmentVariable).
+name: Tests
+on: [push, pull_request]
+jobs:
+  maven-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+          cache: maven
+      - run: mvn --batch-mode test

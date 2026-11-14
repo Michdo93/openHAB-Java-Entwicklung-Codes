@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wohnzimmer</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #1e2227; color: #eee;
+           margin: 1rem; }
+    #kacheln { display: grid; gap: .7rem;
+               grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); }
+    .kachel { background: #2b3036; border-radius: .6rem; padding: .8rem; }
+    .kachel small { color: #9aa; display: block; }
+    .kachel b { font-size: 1.5rem; display: block; margin: .3rem 0; }
+    .an { outline: 2px solid #ff9800; } .an b { color: #ff9800; }
+    button { background: #ff6600; color: #fff; border: 0; border-radius: .4rem;
+             padding: .4rem .8rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Wohnzimmer <button id="gutenacht">Gute Nacht</button></h1>
+  <div id="kacheln"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

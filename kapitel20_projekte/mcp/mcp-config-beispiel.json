@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "openhab": {
+      "command": "java",
+      "args": ["-cp", "/home/pi/codes/target/ohwerkzeuge.jar", "mcp.OpenHABMcp"],
+      "env": {
+        "OPENHAB_URL": "http://openhab:8080",
+        "OPENHAB_TOKEN": "oh.IHR_TOKEN"
+      }
+    }
+  }
+}
