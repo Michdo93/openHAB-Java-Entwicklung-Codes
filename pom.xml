@@ -18,6 +18,8 @@
         <maven.compiler.release>25</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javafx.version>21.0.5</javafx.version>
+        <!-- 3.2.5 von Maven Central; 2.22.3 gibt es dort nicht -->
+        <surefire.version>3.2.5</surefire.version>
     </properties>
 
     <!-- java-openhab-rest-client und java-openhab-test-suite kommen von JitPack -->
@@ -82,7 +84,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.3</version>
+                <version>${surefire.version}</version>
                 <configuration>
                     <!-- Unit-Tests (…Test) und Integrationstests (…IT) in einem Lauf -->
                     <includes>
